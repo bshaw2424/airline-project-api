@@ -1,0 +1,37 @@
+$heading-font-family: "Alegreya", serif;
+$content-font-family: "Lato", sans-serif;
+$content-text-color: "#333";
+$filter-buttons-background-color: hsla(216, 98%, 54%, 1);
+
+.airline-divs {
+  margin-left: 0;
+  margin-right: 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+li {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+  }
+}
+
+button[type="button"] .gm-ui-hover-effect {
+  display: none;
+  height: 20rem;
+  width: 40rem;
+}
+
+@media screen and (max-width: 576px) {
+  .airline-divs {
+    grid-template-columns: repeat(1, auto);
+    width: 95%;
+  }
+}

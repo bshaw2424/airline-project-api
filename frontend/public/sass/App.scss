@@ -1,0 +1,46 @@
+@import "./variables";
+@import "./hero";
+@import "./form";
+@import "./titleDisplay";
+@import "./map";
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $heading-font-family;
+  color: $content-text-color;
+}
+
+body,
+p,
+button a {
+  font-family: $content-font-family;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+  &:hover {
+    color: blue;
+  }
+}
+
+.width {
+  width: 100%;
+}
+
+ul li {
+  list-style: none;
+}
+
+.button-contain {
+  outline: 1px solid #333;
+}
+
+.nav-item {
+  &:hover {
+    border-bottom: 1px solid #333;
+  }
+}

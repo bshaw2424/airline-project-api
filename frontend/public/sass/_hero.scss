@@ -1,0 +1,176 @@
+//  mobile media query
+@media screen and (min-width: 344px) {
+  #home-description-container {
+    flex-direction: column;
+    background: linear-gradient(#e9e6e6, #fff);
+    div {
+      display: flex;
+      flex-direction: column;
+      .image-container {
+        display: none;
+      }
+      div {
+        p {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+    }
+  }
+  .hero-icon {
+    display: none;
+  }
+  .home-description-button-container {
+    .hero-btn {
+      width: 85%;
+      padding: 0.5rem 0;
+    }
+  }
+
+  #featured {
+    .container {
+      display: flex;
+      flex-direction: column;
+
+      h1 {
+        border-bottom: 1px solid #fff;
+        font-size: 3rem;
+        padding-bottom: 1rem;
+      }
+      .airline-names {
+        div ul {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          padding-left: 25%;
+          li {
+            font-size: 1.4rem;
+            list-style-type: circle;
+          }
+        }
+      }
+    }
+  }
+
+  #feature-description {
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .airline-feature {
+        margin-bottom: 3rem;
+        width: 100%;
+        padding: 5rem 1rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+// medium media query
+@media screen and (min-width: 768px) {
+  #featured {
+    .container {
+      display: flex;
+      flex-direction: column;
+
+      .airline-names {
+        div ul {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          padding-left: 3rem;
+          li {
+            font-size: 1.4rem;
+            list-style-type: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// large media query
+@media screen and (min-width: 991px) {
+  #home-description-container {
+    padding: 0;
+    background: white;
+    div {
+      display: flex;
+      flex-direction: row;
+      .image-container {
+        display: block;
+      }
+      div {
+        p {
+          display: flex;
+          flex-direction: column;
+          padding-right: 1.5rem;
+        }
+      }
+    }
+    .home-description-button-container {
+      display: flex;
+      justify-content: end;
+      margin-top: 1rem;
+      .hero-btn {
+        padding: 0.5rem;
+        width: 100%;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .hero-icon {
+    display: none;
+  }
+
+  #featured {
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      h1 {
+        border: 0;
+        border-right: 1px solid #fff;
+        padding-right: 1rem;
+        padding-top: 1rem;
+      }
+      .airline-names {
+        div ul {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          padding: 0 0 1rem 1.5rem;
+          column-gap: 1rem;
+          li {
+            list-style-type: none;
+            font-size: 1.3rem;
+
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+
+  #feature-description {
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      .airline-feature {
+        margin-right: 2rem;
+        margin-bottom: 0;
+        &:last-child {
+          margin: 0;
+          min-height: 100%;
+          padding: 5rem 1rem;
+        }
+      }
+    }
+  }
+}
