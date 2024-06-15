@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
+// routes
 app.use("/airlines", airlineRoutes);
 app.use("/airlines/info", airlineRoutes);
 app.use("/airlines/:slug/destinations", destinationRoutes);

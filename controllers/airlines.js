@@ -15,10 +15,6 @@ module.exports.destinationIndex = async (req, res) => {
   res.json(airlineDestinations);
 };
 
-// module.exports.newAirline = async (req, res) => {
-//   res.render("airlines/new");
-// };
-
 module.exports.showPage = async (req, res) => {
   const { slug } = req.params;
   const showPage = await Airlines.findOne({ slug });
