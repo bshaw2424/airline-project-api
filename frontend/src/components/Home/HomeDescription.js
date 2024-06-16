@@ -15,6 +15,7 @@ const HomeDescription = ({ isLoading }) => {
       style={{
         height: "100vh",
         marginTop: ".5rem",
+        marginBottom: "1rem",
       }}
       id="home-description-container"
       className="container d-flex justify-content-center align-items-center"

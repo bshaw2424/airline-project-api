@@ -3,26 +3,29 @@ const AirlineFeature = ({ link }) => {
   // const marginClass = isLast ? "me-0" : "me-5";
   return (
     <div
-      className={`d-flex  justify-content-center align-items-center flex-column airline-feature`}
+      className={`flex-column airline-feature`}
       style={{
         fontSize: "1.2em",
       }}
     >
       <h2
-        className="text-center pb-4 mb-4 border-bottom border-dark"
-        style={{ fontSize: "3rem" }}
+        className="border-bottom border-dark pb-3"
+        style={{ fontSize: "3.3rem" }}
       >
+        Airport Security Tips
+      </h2>
+      <p style={{ fontSize: "2rem" }}>
         Discover what items are <span className="text-danger">Prohibited</span>{" "}
         and what items are <span className="text-success">Acceptable</span> for
         carry-on and checked luggage before arriving at the airport.
-      </h2>
+      </p>
       <span>
         <Link
           to={link}
           target="_blank"
           rel="noreferrer"
           alt="TSA - What Can I Bring Resource List"
-          className="btn btn-lg rounded btn-dark"
+          className="btn btn-lg rounded btn-outline-dark shadow-sm"
         >
           What Can I Bring?
         </Link>
