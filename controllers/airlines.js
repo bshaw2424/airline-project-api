@@ -17,7 +17,7 @@ module.exports.destinationIndex = async (req, res) => {
 
 module.exports.showPage = async (req, res) => {
   const { slug } = req.params;
-  const showPage = await Airlines.findOne({ slug });
+  // const showPage = await Airlines.findOne({ slug });
   const destinations = await Airlines.findOne({ slug }).populate(
     "destinations",
   );

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-// const cors = require("cors");
+const server = require("serverless-http");
 const airlineRoutes = require("./routes/airlines");
 const destinationRoutes = require("./routes/destinations");
 require("./databaseConnection");
@@ -8,8 +8,6 @@ require("./databaseConnection");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// app.use(cors());
 
 // routes
 app.use("/airlines", airlineRoutes);

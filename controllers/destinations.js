@@ -10,6 +10,3 @@ module.exports.index = async (req, res) => {
   // res.render("destinations/index", { destinations });
   res.json(destinations);
 };
-
-
-
