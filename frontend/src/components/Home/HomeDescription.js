@@ -44,6 +44,7 @@ const HomeDescription = ({ isLoading }) => {
                 to="/airlines"
                 onClick={() => buttonClick()}
               >
+                {/* shows three dot spinner when loading */}
                 {sending ? (
                   <ThreeDots
                     visible={true}

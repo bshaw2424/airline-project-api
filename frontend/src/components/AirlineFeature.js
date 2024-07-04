@@ -14,7 +14,7 @@ const AirlineFeature = ({ link }) => {
       >
         Airport Security Tips
       </h2>
-      <p style={{ fontSize: "2.1rem" }}>
+      <p style={{ fontSize: "2.2rem" }}>
         Discover what items are <span className="text-danger">Prohibited</span>{" "}
         and what items are <span className="text-success">Acceptable</span> for
         carry-on and checked luggage before arriving at the airport.

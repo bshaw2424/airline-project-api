@@ -9,7 +9,7 @@ function Destinations() {
     <>
       <AirlineDisplayContainer
         destinations={destinations}
-        // stateDestinations={destinations}
+        stateDestinations={destinations}
       />
     </>
   );
