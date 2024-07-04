@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "https://seal-app-gglsf.ondigitalocean.app/",
+  "proxy": "http://localhost:8080/airlines",
   "private": true,
   "dependencies": {
     "@react-google-maps/api": "^2.18.1",
