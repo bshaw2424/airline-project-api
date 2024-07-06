@@ -11,8 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.use("/airlines", airlineRoutes);
-app.use("/airlines/info", airlineRoutes);
-app.use("/airlines/:slug/destinations", destinationRoutes);
+// app.use("/airlines", airlineRoutes);
+// app.use("/airlines/info", airlineRoutes);
+// app.use("/airlines/:slug/destinations", destinationRoutes);
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));

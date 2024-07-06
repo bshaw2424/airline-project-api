@@ -18,7 +18,9 @@ function Destinations() {
 const destinationsLoader = async ({ params }) => {
   const { slug } = params;
 
-  const response = await axios.get(`http://localhost:8080/airlines/${slug}`);
+  const response = await axios.get(
+    `https://whale-app-v8vd4.ondigitalocean.app/api/airlines/${slug}/destinations`,
+  );
 
   return response.data;
 };
