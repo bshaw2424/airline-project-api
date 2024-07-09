@@ -18,7 +18,6 @@ import Loader from "./Loader";
 
 export default function AirlineLanding() {
   const navigation = useNavigation();
-  console.log(navigation.state);
   const getAirlineDataFromLoader = useLoaderData();
 
   // state management methods

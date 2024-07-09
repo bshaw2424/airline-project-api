@@ -9,29 +9,33 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
     axios
       .get(`${process.env.REACT_APP_API}/api/airlines`)
       .then(response => {
-        setAirlines(response.data);
+        if (Array.isArray(response.data)) {
+          setAirlines(response.data);
+        } else {
+          console.error("API response is not an array:", response.data);
+        }
       })
       .catch(e => console.log(e.message));
   }, []);
 
   return (
-    <>
-      <div className="dropdown">
-        <button
-          className="btn dropdown-toggle width my-sm-2"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-          style={{ outline: "1px solid blue" }}
-        >
-          Change Airline
-        </button>
+    <div className="dropdown">
+      <button
+        className="btn dropdown-toggle width my-sm-2"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        style={{ outline: "1px solid blue" }}
+      >
+        Change Airline
+      </button>
 
-        <ul className="dropdown-menu">
-          {airlines
+      <ul className="dropdown-menu">
+        {Array.isArray(airlines) && airlines.length > 0 ? (
+          airlines
             .sort((a, b) => a.name.localeCompare(b.name))
-            .map(airlineNames => {
-              const { slug, name, _id } = airlineNames;
+            .map(airline => {
+              const { slug, name, _id } = airline;
 
               return (
                 <li key={_id}>
@@ -44,9 +48,11 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
                   </Link>
                 </li>
               );
-            })}
-        </ul>
-      </div>
-    </>
+            })
+        ) : (
+          <li>No airlines available</li>
+        )}
+      </ul>
+    </div>
   );
 }
