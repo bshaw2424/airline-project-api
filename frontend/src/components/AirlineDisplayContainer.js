@@ -206,7 +206,7 @@ export default function AirlineDisplayContainer({ destinations }) {
               <div className="d-flex flex-column flex-xl-row flex-sm-column  align-items-xl-center justify-content-xl-end width">
                 <AirlineDropdownList
                   getAirlineUrl={resetDestination}
-                  destinations={destinations}
+                  // /destinations={destinations}
                 />
 
                 <StateFilter

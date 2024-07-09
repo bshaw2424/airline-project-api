@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { getAirlineNames } from "../Utilities";
 
 export default function AirlineDropdownList({ getAirlineUrl }) {
   const [airlines, setAirlines] = useState([]);
@@ -17,23 +18,22 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
       })
       .catch(e => console.log(e.message));
   }, []);
-  console.log(airlines.map(a => a.slug));
   const sortedAirlines = (
     <ul className="dropdown-menu">
       {Array.isArray(airlines) && airlines.length > 0 ? (
         airlines
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(airline => {
-            // const { slug, name, _id } = airline;
-
+            const { slug, name, _id } = airline;
+            console.log(Array.isArray(airline));
             return (
-              <li key={airline._id}>
+              <li key={`${name}-${_id}`}>
                 <Link
                   onClick={e => getAirlineUrl(e)}
-                  to={`/airlines/${airline.slug}/destinations`}
+                  to={`/airlines/${slug}/destinations`}
                   className="dropdown-item"
                 >
-                  {airline.name}
+                  {name}
                 </Link>
               </li>
             );
