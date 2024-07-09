@@ -204,7 +204,7 @@ export default function AirlineLanding() {
   return (
     <>
       {navigation.state !== "loading" && (
-        <section className="container">
+        <section>
           <Form
             onSubmit={e => airlineSearch(e)}
             handleOptionChange={e => handleOptionChange(e)}
@@ -216,6 +216,7 @@ export default function AirlineLanding() {
           {error && (
             <Error message={airportCodeErrorMessage} messageDiv={error} />
           )}
+
           <AnimatePresence>
             {links && (
               <motion.section
