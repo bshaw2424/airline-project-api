@@ -7,7 +7,7 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
 
   useEffect(() => {
     axios
-      .get(`https://whale-app-v8vd4.ondigitalocean.app/api/airlines`)
+      .get(`${process.env.REACT_APP_API}/api/airlines`)
       .then(response => {
         setAirlines(response.data);
       })

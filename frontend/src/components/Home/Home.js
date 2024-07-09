@@ -36,7 +36,9 @@ export default function Home() {
 }
 
 export const destinationIndexLoader = async () => {
-  const response = await axios.get(`http://localhost:8080/airlines/info`);
+  const response = await axios.get(
+    `${process.env.REACT_APP_API}/airlines/info`,
+  );
 
   return response.data;
 };
