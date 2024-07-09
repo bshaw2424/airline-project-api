@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-export default function AirlineDropdownList({ getAirlineUrl, destinations }) {
+export default function AirlineDropdownList({ getAirlineUrl }) {
   const [airlines, setAirlines] = useState([]);
 
   useEffect(() => {
@@ -17,22 +17,32 @@ export default function AirlineDropdownList({ getAirlineUrl, destinations }) {
       })
       .catch(e => console.log(e.message));
   }, []);
+  console.log(airlines.map(a => a.slug));
+  const sortedAirlines = (
+    <ul className="dropdown-menu">
+      {Array.isArray(airlines) && airlines.length > 0 ? (
+        airlines
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(airline => {
+            // const { slug, name, _id } = airline;
 
-  const sortedAirlines = airlines.map(airline => {
-    const { slug, name, _id } = airline;
-
-    return (
-      <li key={`${name}-${_id}`}>
-        <Link
-          onClick={e => getAirlineUrl(e)}
-          to={`/airlines/${slug}/destinations`}
-          className="dropdown-item"
-        >
-          {name}
-        </Link>
-      </li>
-    );
-  });
+            return (
+              <li key={airline._id}>
+                <Link
+                  onClick={e => getAirlineUrl(e)}
+                  to={`/airlines/${airline.slug}/destinations`}
+                  className="dropdown-item"
+                >
+                  {airline.name}
+                </Link>
+              </li>
+            );
+          })
+      ) : (
+        <li>No airlines available</li>
+      )}
+    </ul>
+  );
 
   return (
     <div className="dropdown">
@@ -45,7 +55,7 @@ export default function AirlineDropdownList({ getAirlineUrl, destinations }) {
       >
         Change Airline
       </button>
-      <ul className="dropdown-menu">{sortedAirlines}</ul>
+      {sortedAirlines}
     </div>
   );
 }
