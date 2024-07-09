@@ -31,7 +31,7 @@ const HomeDescription = ({ isLoading }) => {
             style={{
               fontSize: "3rem",
               color: "#333",
-              marginLeft: "1.5rem",
+              paddingLeft: "1.5rem",
               textTransform: "capitalize",
               flex: 2,
             }}

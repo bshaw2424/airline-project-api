@@ -204,7 +204,7 @@ export default function AirlineLanding() {
   return (
     <>
       {navigation.state !== "loading" && (
-        <section>
+        <section className="container">
           <Form
             onSubmit={e => airlineSearch(e)}
             handleOptionChange={e => handleOptionChange(e)}
