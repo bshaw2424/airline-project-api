@@ -14,7 +14,7 @@ export default function DisplayFilterList({
             const { airport_code, airport_name, city, state, name, _id } =
               location;
             return (
-              <Cards key={name} id={_id}>
+              <Cards key={`${name}-${_id}`} id={_id}>
                 <DestinationCard
                   _id={_id}
                   airport_code={airport_code}

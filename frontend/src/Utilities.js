@@ -7,7 +7,6 @@ export const getStates = airlineDestinationLocation => {
   const filterStates = [...new Set(getLocationDestinations)]
     .map(destinationLocationState => destinationLocationState)
     .sort();
-
   return filterStates;
 };
 

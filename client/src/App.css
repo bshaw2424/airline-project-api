@@ -1,0 +1,304 @@
+.airline-divs {
+  margin-left: 0;
+  margin-right: 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+li {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+li.active {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+button[type=button] .gm-ui-hover-effect {
+  display: none;
+  height: 20rem;
+  width: 40rem;
+}
+
+@media screen and (max-width: 576px) {
+  .airline-divs {
+    grid-template-columns: repeat(1, auto);
+    width: 95%;
+  }
+}
+@media screen and (min-width: 344px) {
+  #home-description-container {
+    flex-direction: column;
+    background: linear-gradient(#e9e6e6, #fff);
+  }
+  #home-description-container div {
+    display: flex;
+    flex-direction: column;
+  }
+  #home-description-container div .image-container {
+    display: none;
+  }
+  #home-description-container div div p {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-icon {
+    display: none;
+  }
+  .home-description-button-container .hero-btn {
+    width: 85%;
+    padding: 0.5rem 0;
+  }
+  #featured .container {
+    display: flex;
+    flex-direction: column;
+  }
+  #featured .container h1 {
+    border-bottom: 1px solid #fff;
+    font-size: 3rem;
+    padding-bottom: 1rem;
+  }
+  #featured .container .airline-names div ul {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding-left: 25%;
+  }
+  #featured .container .airline-names div ul li {
+    font-size: 1.4rem;
+    list-style-type: circle;
+  }
+  #feature-description .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #feature-description .container .airline-feature {
+    margin-bottom: 3rem;
+    width: 100%;
+    padding: 5rem 1rem;
+  }
+  #feature-description .container .airline-feature:last-child {
+    margin-bottom: 0;
+  }
+  .notification-img {
+    display: none;
+    border: 12px solid blue;
+  }
+}
+@media screen and (min-width: 768px) {
+  #featured .container {
+    display: flex;
+    flex-direction: column;
+  }
+  #featured .container .airline-names div ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-left: 3rem;
+  }
+  #featured .container .airline-names div ul li {
+    font-size: 1.4rem;
+    list-style-type: none;
+  }
+}
+@media screen and (min-width: 991px) {
+  #home-description-container {
+    padding: 0;
+    background: white;
+  }
+  #home-description-container div {
+    display: flex;
+    flex-direction: row;
+  }
+  #home-description-container div .image-container {
+    display: block;
+  }
+  #home-description-container div div p {
+    display: flex;
+    flex-direction: column;
+    padding-right: 1.5rem;
+  }
+  #home-description-container .home-description-button-container {
+    display: flex;
+    justify-content: end;
+    margin-top: 1rem;
+  }
+  #home-description-container .home-description-button-container .hero-btn {
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 1.2rem;
+  }
+  .hero-icon {
+    display: none;
+  }
+  #featured .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  #featured .container h1 {
+    border: 0;
+    border-right: 1px solid #fff;
+    padding-right: 1rem;
+    padding-top: 1rem;
+  }
+  #featured .container .airline-names div ul {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 0 0 1rem 1.5rem;
+    -moz-column-gap: 1rem;
+         column-gap: 1rem;
+  }
+  #featured .container .airline-names div ul li {
+    list-style-type: none;
+    font-size: 1.3rem;
+    cursor: default;
+  }
+  #feature-description .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  #feature-description .container .airline-feature {
+    margin-right: 2rem;
+    margin-bottom: 0;
+  }
+  #feature-description .container .airline-feature:last-child {
+    margin: 0;
+    min-height: 100%;
+    padding: 5rem 1rem;
+  }
+}
+form {
+  margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 344px) {
+  form div .form-inputs {
+    min-width: 100%;
+  }
+  form div .form-inputs .form-select {
+    min-width: 100%;
+  }
+  form div .form-inputs .form-inputField {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.4rem 0;
+  }
+  form div .form-button {
+    margin-top: 1rem;
+  }
+  form div .form-button .btn {
+    width: 100%;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+}
+@media screen and (min-width: 768px) {
+  #form form {
+    padding: 2rem;
+  }
+  #form form div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+  }
+  #form form div .form-inputs {
+    align-items: center;
+    justify-content: center;
+  }
+  #form form div .form-inputs .form-select {
+    margin-right: 2rem;
+    min-width: 25%;
+  }
+  #form form div .form-inputs .form-inputField {
+    margin: 0 1rem 0 0;
+  }
+  #form form div .form-button {
+    margin-top: 1.5rem;
+  }
+  #form form div .form-button .btn {
+    width: 100%;
+    font-size: 1.2rem;
+  }
+}
+@media screen and (min-width: 344px) {
+  #display-title h1 {
+    font-size: 2rem;
+  }
+  #display-title h3 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+}
+@media screen and (min-width: 768px) {
+  #display-title h1 {
+    font-size: 2.4rem;
+  }
+  #display-title h3 {
+    font-size: 2rem;
+  }
+}
+@media screen and (min-width: 991px) {
+  #display-title h1 {
+    font-size: 3rem;
+    padding: 1rem;
+  }
+}
+@media screen and (min-width: 344px) {
+  #stateDestinationMap button[type=button] {
+    position: "absolute";
+    top: -15;
+    right: 15;
+  }
+  #stateDestinationMap .dropdown ul li {
+    padding: 0;
+    padding: 0.75rem 0;
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Alegreya", serif;
+  color: "#333";
+}
+
+body,
+p,
+button a {
+  font-family: "Lato", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+a:hover {
+  color: blue;
+}
+
+.width {
+  width: 100%;
+}
+
+ul li {
+  list-style: none;
+}
+
+.button-contain {
+  outline: 1px solid #333;
+}
+
+.nav-item:hover {
+  border-bottom: 1px solid #333;
+}/*# sourceMappingURL=App.css.map */
