@@ -13,7 +13,7 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
       })
       .catch(e => console.log(e.message));
   }, []);
-  console.log(process.env.REACT_APP_API);
+
   return (
     <>
       <div className="dropdown">
@@ -29,7 +29,7 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
 
         <ul className="dropdown-menu">
           {airlines
-            // .sort((a, b) => a.name.localeCompare(b.name))
+            .sort((a, b) => a.name.localeCompare(b.name))
             .map(airlineNames => {
               const { slug, name, _id } = airlineNames;
 
