@@ -32,9 +32,13 @@ export default function Home() {
 }
 
 export const destinationIndexLoader = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API}/api/airlines/info`,
-  );
-
-  return response.data;
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/api/airlines/info`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching airline info:", error);
+    throw error;
+  }
 };
