@@ -7,7 +7,7 @@ export default function DisplayAirportCodeTitle({
   airportName,
 }) {
   return (
-    <div className="container px-4" id="display-title">
+    <div className="container mb-lg-5 mt-lg-3 mt-sm-5" id="display-title">
       <h1 className="w-100 text-center border-dark bg-dark text-white py-3 rounded-4">
         {`${airlineAirportLength} out of 10 airlines fly to `}
         {selectOption === "airport_code" && airlineAirportLength !== 0

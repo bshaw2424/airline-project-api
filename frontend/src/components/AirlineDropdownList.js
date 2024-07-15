@@ -17,31 +17,6 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
       })
       .catch(e => console.log(e.message));
   }, []);
-  const sortedAirlines = (
-    <ul className="dropdown-menu">
-      {Array.isArray(airlines) && airlines.length > 0 ? (
-        airlines
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map(airline => {
-            const { slug, name, _id } = airline;
-            console.log(Array.isArray(airline));
-            return (
-              <li key={`${name}-${_id}`}>
-                <Link
-                  onClick={e => getAirlineUrl(e)}
-                  to={`/airlines/${slug}/destinations`}
-                  className="dropdown-item"
-                >
-                  {name}
-                </Link>
-              </li>
-            );
-          })
-      ) : (
-        <li>No airlines available</li>
-      )}
-    </ul>
-  );
 
   return (
     <div className="dropdown">
@@ -54,7 +29,30 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
       >
         Change Airline
       </button>
-      {sortedAirlines}
+
+      <ul className="dropdown-menu">
+        {Array.isArray(airlines) && airlines.length > 0 ? (
+          airlines
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(airline => {
+              const { slug, name, _id } = airline;
+
+              return (
+                <li key={_id}>
+                  <Link
+                    onClick={e => getAirlineUrl(e)}
+                    to={`/airlines/${slug}/destinations`}
+                    className="dropdown-item"
+                  >
+                    {name}
+                  </Link>
+                </li>
+              );
+            })
+        ) : (
+          <li>No airlines available</li>
+        )}
+      </ul>
     </div>
   );
 }

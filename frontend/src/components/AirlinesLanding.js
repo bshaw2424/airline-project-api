@@ -21,7 +21,6 @@ export default function AirlineLanding() {
   const getAirlineDataFromLoader = useLoaderData();
 
   // state management methods
-
   const [formSearch, setFormSearch] = useState();
   const [formValues, setFormValues] = useState("");
   const [selectOption, setSelectOption] = useState("default");
@@ -97,11 +96,15 @@ export default function AirlineLanding() {
   }
 
   useEffect(() => {
-    if (selectOption === "state" && getLengthOfDestinationsForState !== 0) {
-      setMapSearch(true);
-      setLinks(false);
-      setError(false);
-      setAirportCodeErrorMessage("");
+    if (selectOption === "state") {
+      if (getLengthOfDestinationsForState !== 0) {
+        setMapSearch(true);
+        setLinks(false);
+        setError(false);
+        setAirportCodeErrorMessage("");
+      } else {
+        setMapSearch(false);
+      }
     }
 
     if (selectOption === "airport_code") {
@@ -116,18 +119,22 @@ export default function AirlineLanding() {
 
   const handleOptionChange = e => {
     setSelectOption(e.target.value);
+    setPreviousFormValue("");
+    setFormValues("");
+    setError(false);
+    setAirportCodeErrorMessage("");
+    setAirportSearchMessage("");
+    setMapSearch(false);
+    setLinks(true);
+    setDropDownValue(false);
 
     if (e.target.value === "state") {
-      setError(false);
       setAirportSearch(false);
       setFilterIcons("");
-      setAirportSearchMessage("");
     }
     if (e.target.value === "airport_code") {
-      setError(false);
       setAirportSearch(true);
       setMapSearch(false);
-      setPreviousFormValue("");
     }
   };
 
@@ -177,6 +184,17 @@ export default function AirlineLanding() {
 
     const inputValueSubmittedFromForm = formValues;
 
+    // Check for empty input length and selectOption
+    if (inputValueSubmittedFromForm.length === 0) {
+      if (selectOption === "airport_code") {
+        handleErrorMessages(inputValueSubmittedFromForm, "Airport Code");
+      } else if (selectOption === "state") {
+        handleErrorMessages(inputValueSubmittedFromForm, "State");
+      }
+      setError(true);
+      return;
+    }
+
     setPreviousFormValue(inputValueSubmittedFromForm);
     setFilterIcons(selectOption);
 
@@ -212,7 +230,7 @@ export default function AirlineLanding() {
             selectOption={selectOption}
           />
           {airportSearch && airportSearchMessage}
-          {error && (
+          {error && airportCodeErrorMessage && (
             <Error message={airportCodeErrorMessage} messageDiv={error} />
           )}
 
@@ -228,7 +246,6 @@ export default function AirlineLanding() {
                   targetInput={previousFormValue.toUpperCase()}
                   showIconForAirportCode={filterIcons}
                   airportCodeErrorMessage={airportCodeErrorMessage}
-                  showMessage={links}
                 />
               </motion.section>
             )}
@@ -246,6 +263,9 @@ export default function AirlineLanding() {
               value={dropDownValue}
               closeButton={setMapSearch}
               airlineButtons={setLinks}
+              error={error}
+              setError={setError}
+              select={selectOption}
             />
 
             <AirlineDisclaimer />
@@ -264,7 +284,7 @@ export default function AirlineLanding() {
 
 export const destinationIndexLoader = async () => {
   const response = await axios.get(
-    `https://whale-app-v8vd4.ondigitalocean.app/api/airlines/info`,
+    `${process.env.REACT_API}/api/airlines/info`,
   );
 
   return response.data;

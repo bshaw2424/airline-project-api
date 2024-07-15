@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "front-end",
   "version": "0.1.0",
   "proxy": "https://whale-app-v8vd4.ondigitalocean.app/api/airlines",
   "private": true,

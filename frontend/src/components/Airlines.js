@@ -3,11 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import AirlineListDataLinks from "./AirlineListDataLinks";
 import axios from "axios";
 
-export default function Airlines({
-  targetInput,
-  showIconForAirportCode,
-  showMessage,
-}) {
+export default function Airlines({ targetInput, showIconForAirportCode }) {
   // using a loader to fetch the data
   const airlineData = useLoaderData();
 

@@ -14,7 +14,8 @@ import { DestinationCategorySelect } from "./DestinationCategorySelect";
 export default function AirlineDisplayContainer({ destinations }) {
   // state management
 
-  const [domesticData, setDomesticData] = useState(true);
+  const [allDestinations, setAllDestinations] = useState(true);
+  const [domesticData, setDomesticData] = useState(false);
   const [internationalData, setInternationalData] = useState(false);
   const [seasonalData, setSeasonalData] = useState(false);
   const [selectChange, setSelectChange] = useState(false);
@@ -61,6 +62,11 @@ export default function AirlineDisplayContainer({ destinations }) {
     }
   }
 
+  const getAllDestinations = () => {
+    return destinations.destinations.map(getAllEntries => getAllEntries._id)
+      .length;
+  };
+
   const loadingPromise = () => {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -92,6 +98,7 @@ export default function AirlineDisplayContainer({ destinations }) {
     setInternationalData(false);
     setSeasonalData(false);
     setLocationShow(false);
+    setAllDestinations(false);
   };
 
   const InternationalData = e => {
@@ -102,6 +109,7 @@ export default function AirlineDisplayContainer({ destinations }) {
     setInternationalData(true);
     setSeasonalData(false);
     setLocationShow(false);
+    setAllDestinations(false);
   };
 
   const SeasonalData = e => {
@@ -112,27 +120,28 @@ export default function AirlineDisplayContainer({ destinations }) {
     setDomesticData(false);
     setInternationalData(false);
     setLocationShow(false);
+    setAllDestinations(false);
   };
 
   function setDefaultSetting() {
-    setDomesticData(true);
+    setDestinationNumber(getAllDestinations());
+    setAllDestinations(true);
+    setDomesticData(false);
     setInternationalData(false);
     setSeasonalData(false);
   }
 
   // resets the destination select when the state/country select menu is active
   useEffect(() => {
-    !domesticData && setSelectChange(true);
+    !allDestinations && setSelectChange(true);
     // clickChange && setDomesticData(false);
-  }, [domesticData, selectChange, dropdownItem, clickChange]);
+  }, [allDestinations, selectChange, dropdownItem, clickChange]);
 
   // change number of flights total to correspond with associated airline when airline value changed.
   // Defaults to Domestic total
   useEffect(() => {
     setDestinationNumber(
-      destinations.destinations.filter(
-        listData => listData.international === "false",
-      ).length,
+      destinations.destinations.filter(listData => listData).length,
     );
   }, [destinations.destinations]);
 
@@ -156,7 +165,8 @@ export default function AirlineDisplayContainer({ destinations }) {
 
     if (e.target.value !== "default") {
       setLocationState("default");
-      setDomesticData(true);
+      setAllDestinations(true);
+      setDomesticData(false);
       setSeasonalData(false);
       setInternationalData(false);
     }
@@ -204,10 +214,7 @@ export default function AirlineDisplayContainer({ destinations }) {
               />
 
               <div className="d-flex flex-column flex-xl-row flex-sm-column  align-items-xl-center justify-content-xl-end width">
-                <AirlineDropdownList
-                  getAirlineUrl={resetDestination}
-                  // /destinations={destinations}
-                />
+                <AirlineDropdownList getAirlineUrl={resetDestination} />
 
                 <StateFilter
                   onChange={handleLocationChange}
@@ -220,6 +227,8 @@ export default function AirlineDisplayContainer({ destinations }) {
           </section>
           <section>
             <div className="container py-3">
+              {allDestinations && <ShowDataList destinations={destinations} />}
+
               {/* shows international list */}
               {internationalData && (
                 <ShowDataList
