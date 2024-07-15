@@ -150,6 +150,7 @@ export default function AirlineDisplayContainer({ destinations }) {
     setLocationState(e.target.value);
     setLocationShow(true);
     setInternationalData(false);
+    setAllDestinations(false);
     setDomesticData(false);
     setSeasonalData(false);
     setDestinationErrorMessage("");
