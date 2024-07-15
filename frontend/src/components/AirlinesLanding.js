@@ -284,7 +284,7 @@ export default function AirlineLanding() {
 
 export const destinationIndexLoader = async () => {
   const response = await axios.get(
-    `${process.env.REACT_API}/api/airlines/info`,
+    `${process.env.REACT_APP_API}/api/airlines/info`,
   );
 
   return response.data;

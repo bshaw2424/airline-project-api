@@ -1,5 +1,7 @@
 import FeaturedAirlines from "../FeaturedAirlines";
+
 import AirlineFeatureDescription from "../AirlineFeatureDescription";
+
 import { useLoaderData, useNavigation } from "react-router-dom";
 import axios from "axios";
 import Hero from "./Hero";
@@ -9,36 +11,34 @@ import Loader from "../Loader";
 export default function Home() {
   const getAirlineNames = useLoaderData();
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // get navigation state to add loader icon
   useEffect(() => {
-    setIsLoading(navigation.state === "loading");
+    navigation.state !== "loading" ? setIsLoading(true) : setIsLoading(false);
   }, [navigation.state]);
-
+  console.log(getAirlineNames);
   return (
-    <main>
-      {isLoading ? (
-        <Loader loading={isLoading} />
-      ) : (
-        <>
-          <Hero loading={setIsLoading} />
-          <FeaturedAirlines airlineNames={getAirlineNames} />
-          <AirlineFeatureDescription />
-        </>
-      )}
-    </main>
+    <>
+      <main>
+        {isLoading ? (
+          <>
+            <Hero loading={setIsLoading} />
+            <FeaturedAirlines airlineNames={getAirlineNames} />
+            <AirlineFeatureDescription />
+          </>
+        ) : (
+          <Loader loading={!isLoading} />
+        )}
+      </main>
+    </>
   );
 }
 
 export const destinationIndexLoader = async () => {
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API}/api/airlines/info`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching airline info:", error);
-    throw error;
-  }
+  const response = await axios.get(
+    `${process.env.REACT_APP_API}/api/airlines/info`,
+  );
+
+  return response.data;
 };
