@@ -37,7 +37,7 @@ export default function Home() {
 
 export const destinationIndexLoader = async () => {
   const response = await axios.get(
-    `${process.env.REACT_APP_API}/airlines/info`,
+    `${process.env.REACT_APP_API}/api/airlines/info`,
   );
 
   return response.data;
