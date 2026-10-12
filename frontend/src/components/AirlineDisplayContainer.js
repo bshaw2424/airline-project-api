@@ -164,13 +164,13 @@ export default function AirlineDisplayContainer({ destinations }) {
     loadingPromise();
     setAirlineName(e.target.innerText);
 
-    if (e.target.value !== "default") {
-      setLocationState("default");
-      setAllDestinations(true);
-      setDomesticData(false);
-      setSeasonalData(false);
-      setInternationalData(false);
-    }
+    // if (e.target.value !== "default") {
+    //   setLocationState("default");
+    //   setAllDestinations(true);
+    //   setDomesticData(false);
+    //   setSeasonalData(false);
+    //   setInternationalData(false);
+    // }
     setCurrentSelectValue("default");
   }
 

@@ -16,7 +16,7 @@ export default function AirlineDataModal({ airlines, id }) {
       case "Frontier Airlines":
         return "F9";
       case "Hawaiian Airlines":
-        return "HA";
+        return "AS";
       case "JetBlue Airways":
         return "B6";
       case "Southwest Airlines":

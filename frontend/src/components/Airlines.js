@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigation } from "react-router-dom";
 
 import AirlineListDataLinks from "./AirlineListDataLinks";
 import axios from "axios";
@@ -6,7 +6,9 @@ import axios from "axios";
 export default function Airlines({ targetInput, showIconForAirportCode }) {
   // using a loader to fetch the data
   const airlineData = useLoaderData();
+  const navigation = useNavigation();
 
+  console.log(navigation.state);
   const getAirlineListItemBasedOnActiveStatusToShowIcon = () => {
     const objectListAirlineNameAndLength = [];
     const activeList = [];

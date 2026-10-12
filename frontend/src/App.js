@@ -14,6 +14,7 @@ import {
 import AirlineLanding from "./components/AirlinesLanding";
 import AirlineSearch from "./components/AirlineSearch";
 import ErrorPage from "./components/Error/ErrorPage";
+import AirlinePage from "./components/Airline/AirlinePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,12 @@ const router = createBrowserRouter(
       <Route
         path="airlines/search"
         element={<AirlineSearch />}
+        loader={destinationIndexLoader}
+      />
+
+      <Route
+        path="airlines/:slug"
+        element={<AirlinePage />}
         loader={destinationIndexLoader}
       />
 

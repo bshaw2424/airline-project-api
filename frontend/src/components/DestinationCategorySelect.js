@@ -46,7 +46,9 @@ export const DestinationCategorySelect = ({
         defaultValue={value}
         key={value}
       >
-        <option value="default">Total Destinations</option>
+        <option value="default" selected>
+          Total Destinations
+        </option>
         <option value="domestic">Domestic</option>
         <option value="international">International</option>
         <option value="seasonal">Seasonal</option>

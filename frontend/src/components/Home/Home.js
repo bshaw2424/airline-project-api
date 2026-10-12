@@ -17,18 +17,18 @@ export default function Home() {
   useEffect(() => {
     navigation.state !== "loading" ? setIsLoading(true) : setIsLoading(false);
   }, [navigation.state]);
-  console.log(getAirlineNames);
+
   return (
     <>
       <main>
         {isLoading ? (
           <>
-            <Hero loading={setIsLoading} />
+            <Hero />
             <FeaturedAirlines airlineNames={getAirlineNames} />
             <AirlineFeatureDescription />
           </>
         ) : (
-          <Loader loading={!isLoading} />
+          <Loader loading={isLoading} />
         )}
       </main>
     </>

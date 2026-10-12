@@ -11,8 +11,9 @@ export default function StateFilter({
   const [defaultSelectItem, setDefaultSelectItem] = useState("default");
 
   useEffect(() => {
-    setDefaultSelectItem(dropdownItem ? "default" : currentSelectValue);
+    setDefaultSelectItem(!dropdownItem ? "default" : currentSelectValue);
   }, [dropdownItem, currentSelectValue, defaultSelectItem]);
+
   return (
     <div className="mt-3 mt-lg-0 ms-xl-3">
       <SelectElement
