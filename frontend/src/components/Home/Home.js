@@ -1,37 +1,30 @@
 import FeaturedAirlines from "../FeaturedAirlines";
-
 import AirlineFeatureDescription from "../AirlineFeatureDescription";
 
 import { useLoaderData, useNavigation } from "react-router-dom";
 import axios from "axios";
+
 import Hero from "./Hero";
-import { useEffect, useState } from "react";
 import Loader from "../Loader";
 
 export default function Home() {
-  const getAirlineNames = useLoaderData();
+  const airlineNames = useLoaderData();
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
 
-  // get navigation state to add loader icon
-  useEffect(() => {
-    navigation.state !== "loading" ? setIsLoading(true) : setIsLoading(false);
-  }, [navigation.state]);
+  const isLoading = navigation.state === "loading";
 
   return (
-    <>
-      <main>
-        {isLoading ? (
-          <>
-            <Hero />
-            <FeaturedAirlines airlineNames={getAirlineNames} />
-            <AirlineFeatureDescription />
-          </>
-        ) : (
-          <Loader loading={isLoading} />
-        )}
-      </main>
-    </>
+    <main>
+      {isLoading ? (
+        <Loader loading={isLoading} />
+      ) : (
+        <>
+          <Hero />
+          <FeaturedAirlines airlineNames={airlineNames} />
+          <AirlineFeatureDescription />
+        </>
+      )}
+    </main>
   );
 }
 

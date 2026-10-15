@@ -1,43 +1,26 @@
-// import HomeSearch from "./HomeSearch";
-import HomeSearch from '../Search/HomeSearch';
-
 const HomeDescription = () => {
   return (
-    <section
-      style={{
-        height: "100vh",
-        marginTop: ".5rem",
-        marginBottom: "1rem",
-      }}
-      id="home-description-container"
-    >
-      <div style={{ height: "100%" }}>
-        <div
-          style={{
-            display: "flex",
-            height: "100%",
-          }}
-    
-        >
-          <p
-            style={{
-              fontSize: "3rem",
-              color: "#333",
-              paddingLeft: "1.5rem",
-              textTransform: "capitalize",
-              flex: 2,
-            }}
-            className="d-flex justify-content-center align-items-center"
-          >
-            Finding your next favorite travel destination
-            <span className="text-primary">Awaits</span>
-            <h5 className="mt-3">
-              Explore which airlines fly to your favorite airport and discover
-              all the destinations you can reach
-            </h5>
-          </p>
+    <section id="home-description-container" className="py-4 py-md-5">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-10 col-xl-8 w-100">
+            <div className="text-center">
+              <h1
+                className="fw-bold mb-3"
+                style={{
+                  fontSize: "clamp(3rem, 5vw, 3.5rem)",
+                  lineHeight: 1.2,
+                }}
+              >
+                Your next favorite destination awaits.
+              </h1>
 
-  
+              <p className="lead text-muted mb-0">
+                Discover where airlines fly, explore destinations, and save
+                places for your next adventure.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

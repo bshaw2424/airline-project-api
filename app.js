@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const airlineRoutes = require("./routes/airlines");
 const destinationRoutes = require("./routes/destinations");
+
 require("./databaseConnection");
 const PORT = process.env.port || 8080;
 

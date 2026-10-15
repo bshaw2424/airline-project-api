@@ -8,52 +8,51 @@ export default function SearchResults({
   }
 
   return (
-    <section className="search-results rounded-3 shadow-sm w-100">
-      <header className="search-results__header w-100 p-3 text-center">
-        <h2>
+    <section className="search-results container py-4">
+      <header className="text-center mb-4">
+        <h2 className="fs-3 fw-semibold">
           {searchInfo.airlineCount}{" "}
           {searchInfo.airlineCount === 1 ? "airline found" : "airlines found"}
         </h2>
 
-        <p>
+        <p className="text-muted mb-0">
           <strong>{searchInfo.query.toUpperCase()}</strong>
-          {" · "}
-          matched by {searchInfo.type}
+          {" · "} matched by {searchInfo.type}
         </p>
       </header>
 
-      <ul className="search-results__list p-0 d-flex flex-column align-items-center justify-content-center">
+      <ul className="row g-3 list-unstyled m-0">
         {results.map(airline => (
-          <li
-            key={airline.id}
-            className="search-results__item  d-flex align-items-center shadow-sm justify-content-center w-50 border border-1 rounded-3 my-4"
-          >
+          <li key={airline.id} className="col-12 col-sm-6 col-lg-4">
             <button
               type="button"
-              className="search-results__button bg-white border-0 w-100"
+              className="search-results__button w-100 h-100 bg-white border rounded-3 shadow-sm p-4 d-flex flex-column align-items-center justify-content-between gap-3"
               onClick={() => onSelectAirline(airline)}
             >
-              <div className="search-results__airline">
-                <div className=" mt-3">
-                  {airline.logo && (
-                    <img
-                      style={{
-                        objectFit: "contain",
-                        height: "300px",
-                        width: "300px",
-                      }}
-                      src={`../${airline.logo}.png`}
-                      alt={airline.name}
-                      className="search-results__logo img_fluid img-thumbnail rounded-4 p-3 border-0"
-                    />
-                  )}
+              <div className="d-flex align-items-center justify-content-center w-100">
+                {airline.logo && (
+                  <img
+                    src={`../${airline.logo}.png`}
+                    alt={airline.name}
+                    className="img-fluid search-results__logo"
+                  />
+                )}
+              </div>
 
-                  <p className="width-100 p-0 mb-3">
-                    {airline.matchingAirportCount}{" "}
-                    {airline.matchingAirportCount === 1
-                      ? "matching airport"
-                      : "matching airports"}
-                  </p>
+              <div className="text-center">
+                <p className="fw-semibold mb-1">{airline.name}</p>
+
+                <span className="text-muted small">
+                  {airline.matchingAirportCount}{" "}
+                  {airline.matchingAirportCount === 1
+                    ? "matching airport"
+                    : "matching airports"}
+                </span>
+
+                <div className="mt-2">
+                  <span className="small text-primary">
+                    View destinations →
+                  </span>
                 </div>
               </div>
             </button>
