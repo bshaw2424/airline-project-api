@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { Link } from "react-router-dom";
 
 export default function AirlineDropdownList({ getAirlineUrl }) {
   const [airlines, setAirlines] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API}/api/airlines`)
+    api
+      .get("/api/airlines")
       .then(response => {
         if (Array.isArray(response.data)) {
           setAirlines(response.data);
@@ -15,7 +15,7 @@ export default function AirlineDropdownList({ getAirlineUrl }) {
           console.error("API response is not an array:", response.data);
         }
       })
-      .catch(e => console.log(e.message));
+      .catch(error => console.error("Unable to load airlines:", error));
   }, []);
 
   return (

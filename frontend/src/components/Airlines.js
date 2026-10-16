@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigation } from "react-router-dom";
 
 import AirlineListDataLinks from "./AirlineListDataLinks";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function Airlines({ targetInput, showIconForAirportCode }) {
   // using a loader to fetch the data
@@ -57,9 +57,12 @@ export default function Airlines({ targetInput, showIconForAirportCode }) {
 }
 
 export const destinationIndexLoader = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API}/api/airlines/info`,
-  );
+  try {
+    const response = await api.get("/api/airlines/info");
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.error("Unable to load airlines:", error);
+    throw error;
+  }
 };

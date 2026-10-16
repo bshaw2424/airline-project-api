@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api/axios";
 import { useEffect, useState } from "react";
 import { useLoaderData, useNavigation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -283,9 +283,12 @@ export default function AirlineLanding() {
 }
 
 export const destinationIndexLoader = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API}/api/airlines/info`,
-  );
+  try {
+    const response = await api.get("/api/airlines/info");
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.error("Unable to load airline data:", error);
+    throw error;
+  }
 };
