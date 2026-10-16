@@ -1,5 +1,6 @@
 import FeaturedAirlines from "../FeaturedAirlines";
 import AirlineFeatureDescription from "../AirlineFeatureDescription";
+// import api from "../../api/axios"; // Adjust the import path
 
 import { useLoaderData, useNavigation } from "react-router-dom";
 import axios from "axios";
@@ -28,10 +29,37 @@ export default function Home() {
   );
 }
 
-export const destinationIndexLoader = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API}/api/airlines/info`,
-  );
+// export const destinationIndexLoader = async () => {
+//   const response = await axios.get(
+//     `${process.env.REACT_APP_API}/api/airlines/info`,
+//   );
 
-  return response.data;
+//   return response.data;
+// };
+
+export const destinationIndexLoader = async () => {
+  try {
+    console.log("TESTING DIRECT AXIOS REQUEST");
+
+    const response = await axios.get(
+      "http://localhost:8000/api/airlines/info",
+      {
+        withCredentials: false,
+      },
+    );
+
+    console.log("AXIOS STATUS:", response.status);
+    console.log("AIRLINES RECEIVED:", response.data.length);
+
+    return response.data;
+  } catch (error) {
+    console.error("DIRECT AXIOS ERROR:", {
+      url: error.config?.url,
+      status: error.response?.status,
+      code: error.code,
+      message: error.message,
+    });
+
+    throw error;
+  }
 };

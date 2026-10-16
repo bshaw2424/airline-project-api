@@ -1,7 +1,9 @@
 import "./App.css";
 
 import NavRoot from "./components/NavRoot";
-import Home from "./components/Home/Home";
+import Home, {
+  destinationIndexLoader as homeLoader,
+} from "./components/Home/Home";
 import About from "./components/Static/About";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
@@ -11,7 +13,7 @@ import Dashboard from "./components/Dashboard";
 import Collections from "./components/Collections";
 import CollectionDetails from "./components/CollectionDetails";
 
-import { destinationIndexLoader } from "./components/AirlinesLanding";
+import { destinationIndexLoader as airlinesLoader } from "./components/AirlinesLanding";
 import Destinations, { destinationsLoader } from "./components/Destinations";
 
 import {
@@ -30,7 +32,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<NavRoot />}>
       {/* Public pages */}
-      <Route index element={<Home />} loader={destinationIndexLoader} />
+      <Route index element={<Home />} loader={homeLoader} />
 
       <Route path="about" element={<About />} />
       <Route path="login" element={<Login />} />
@@ -40,19 +42,19 @@ const router = createBrowserRouter(
       <Route
         path="airlines"
         element={<AirlineLanding />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       <Route
         path="airlines/search"
         element={<AirlineSearch />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       <Route
         path="airlines/:slug"
         element={<AirlinePage />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       <Route
@@ -65,26 +67,26 @@ const router = createBrowserRouter(
       <Route
         path="saved-destinations"
         element={<SavedDestinations />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       <Route
         path="saved-airlines"
         element={<SavedAirlines />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       {/* Collections */}
       <Route
         path="collections"
         element={<Collections />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       <Route
         path="collections/:id"
         element={<CollectionDetails />}
-        loader={destinationIndexLoader}
+        loader={airlinesLoader}
       />
 
       {/* Dashboard */}

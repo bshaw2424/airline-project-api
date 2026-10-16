@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../api/axios";
 import { useEffect, useMemo, useState } from "react";
 
 import SearchForm from "./SearchForm";
@@ -16,8 +16,7 @@ export default function HomeSearch() {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const [searchInfo, setSearchInfo] = useState(null);
-  const [selectedAirline, setSelectedAirline] =
-    useState(null);
+  const [selectedAirline, setSelectedAirline] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -27,13 +26,11 @@ export default function HomeSearch() {
         setLoading(true);
         setError("");
 
-        const response = await axios.get(
-          `${process.env.REACT_APP_API}/api/airlines/info`,
-        );
+        const response = await api.get("/api/airlines/info");
 
         const airlineData = Array.isArray(response.data)
           ? response.data
-          : response.data.airlines ?? [];
+          : (response.data.airlines ?? []);
 
         setAllAirlines(airlineData);
       } catch (err) {
@@ -57,9 +54,7 @@ export default function HomeSearch() {
     const query = search.trim();
 
     if (!query) {
-      setError(
-        "Enter an airport code, airport name, city, state, or country.",
-      );
+      setError("Enter an airport code, airport name, city, state, or country.");
       setResults([]);
       setSearchInfo(null);
       setSelectedAirline(null);
@@ -69,10 +64,7 @@ export default function HomeSearch() {
     setError("");
     setSelectedAirline(null);
 
-    const searchMatch = findMatches(
-      searchableDestinations,
-      query,
-    );
+    const searchMatch = findMatches(searchableDestinations, query);
 
     if (!searchMatch) {
       setResults([]);
@@ -81,9 +73,7 @@ export default function HomeSearch() {
       return;
     }
 
-    const groupedResults = groupMatchesByAirline(
-      searchMatch.matches,
-    );
+    const groupedResults = groupMatchesByAirline(searchMatch.matches);
 
     setResults(groupedResults);
 
@@ -112,14 +102,9 @@ export default function HomeSearch() {
         onClear={handleClear}
       />
 
-      {error && (
-        <p className="home-search__error text-center mt-3">
-          {error}
-        </p>
-      )}
+      {error && <p className="home-search__error text-center mt-3">{error}</p>}
 
       <article className="d-flex">
-  
         <SearchResults
           results={results}
           searchInfo={searchInfo}
