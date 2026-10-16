@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 
 export default function AirlineDrawer({ airline, onClose }) {
@@ -33,7 +34,7 @@ export default function AirlineDrawer({ airline, onClose }) {
 
         <div className="p-3 p-md-4">
           <ul className="row g-3 list-unstyled mb-0">
-            {airline.matchingAirports.map(airport => (
+            {(airline.matchingAirports ?? []).map(airport => (
               <li
                 key={`${airline.id}-${airport.airport_code}`}
                 className="col-12 col-md-6 col-lg-4"
@@ -57,6 +58,14 @@ export default function AirlineDrawer({ airline, onClose }) {
             ))}
           </ul>
         </div>
+
+        {airline.slug && (
+          <footer className="border-top p-3 p-md-4 d-flex justify-content-center justify-content-md-end">
+            <Link to={`/airlines/${airline.slug}`} className="btn btn-primary">
+              View {airline.name} Page →
+            </Link>
+          </footer>
+        )}
       </div>
     </aside>
   );

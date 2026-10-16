@@ -1,5 +1,5 @@
 import api from "../../api/axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import SearchForm from "./SearchForm";
 import SearchResults from "./SearchResults";
@@ -19,6 +19,8 @@ export default function HomeSearch() {
   const [selectedAirline, setSelectedAirline] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const drawerRef = useRef(null);
 
   useEffect(() => {
     const fetchAirlines = async () => {
@@ -47,6 +49,16 @@ export default function HomeSearch() {
   const searchableDestinations = useMemo(() => {
     return flattenAirlineDestinations(allAirlines);
   }, [allAirlines]);
+
+  // Scroll to the selected airline's destinations
+  useEffect(() => {
+    if (selectedAirline) {
+      drawerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedAirline]);
 
   const handleSearch = event => {
     event.preventDefault();
@@ -104,17 +116,19 @@ export default function HomeSearch() {
 
       {error && <p className="home-search__error text-center mt-3">{error}</p>}
 
-      <article className="d-flex">
+      <article>
         <SearchResults
           results={results}
           searchInfo={searchInfo}
           onSelectAirline={setSelectedAirline}
         />
 
-        <AirlineDrawer
-          airline={selectedAirline}
-          onClose={() => setSelectedAirline(null)}
-        />
+        <div ref={drawerRef}>
+          <AirlineDrawer
+            airline={selectedAirline}
+            onClose={() => setSelectedAirline(null)}
+          />
+        </div>
       </article>
     </section>
   );

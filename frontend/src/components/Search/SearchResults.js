@@ -31,17 +31,16 @@ export default function SearchResults({
             >
               <div className="d-flex align-items-center justify-content-center w-100">
                 {airline.logo && (
-                  <img
-                    src={`../${airline.logo}.png`}
-                    alt={airline.name}
-                    className="img-fluid search-results__logo"
-                  />
+                  // <img
+                  //   src={`../${airline.logo}.png`}
+                  //   alt={airline.name}
+                  //   className="img-fluid search-results__logo"
+                  // />
+                  <h2>{airline.name}</h2>
                 )}
               </div>
 
               <div className="text-center">
-                <p className="fw-semibold mb-1">{airline.name}</p>
-
                 <span className="text-muted small">
                   {airline.matchingAirportCount}{" "}
                   {airline.matchingAirportCount === 1
