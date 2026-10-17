@@ -15,6 +15,7 @@ import {
   FaSignOutAlt,
   FaThLarge,
   FaFolderOpen,
+  FaSuitcase,
 } from "react-icons/fa";
 
 import Footer from "./Static/Footer";
@@ -197,6 +198,15 @@ export default function NavRoot() {
                           >
                             <FaFolderOpen />
                             My Collections
+                          </NavLink>
+
+                          <NavLink
+                            to="/my-trips"
+                            className="dropdown-item d-flex align-items-center gap-2 rounded-2 py-2"
+                            onClick={handleNavLinkClick}
+                          >
+                            <FaSuitcase />
+                            My Trips
                           </NavLink>
 
                           <div className="dropdown-divider" />

@@ -12,6 +12,8 @@ import SavedAirlines from "./components/SavedAirlines";
 import Dashboard from "./components/Dashboard";
 import Collections from "./components/Collections";
 import CollectionDetails from "./components/CollectionDetails";
+import MyTrips from "./components/MyTrips";
+import TripDetails from "./components/TripDetails";
 
 import { destinationIndexLoader as airlinesLoader } from "./components/AirlinesLanding";
 import Destinations, { destinationsLoader } from "./components/Destinations";
@@ -83,6 +85,9 @@ const router = createBrowserRouter(
         loader={airlinesLoader}
       />
 
+      {/* Trips */}
+      <Route path="my-trips" element={<MyTrips />} />
+
       <Route
         path="collections/:id"
         element={<CollectionDetails />}
@@ -91,6 +96,10 @@ const router = createBrowserRouter(
 
       {/* Dashboard */}
       <Route path="dashboard" element={<Dashboard />} />
+
+      {/* Trips */}
+      <Route path="my-trips" element={<MyTrips />} />
+      <Route path="my-trips/:id" element={<TripDetails />} />
 
       {/* Not found */}
       <Route path="*" element={<ErrorPage />} />
