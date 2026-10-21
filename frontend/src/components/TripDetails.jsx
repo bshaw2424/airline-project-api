@@ -3,6 +3,23 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import EditTrip from "./EditTrip";
 
+const initialDestination = {
+  name: "",
+  type: "city",
+  city: "",
+  state: "",
+  country: "",
+  airportCode: "",
+};
+
+const destinationTypes = [
+  { value: "city", label: "City" },
+  { value: "airport", label: "Airport" },
+  { value: "attraction", label: "Attraction" },
+  { value: "region", label: "State / Region" },
+  { value: "custom", label: "Custom Place" },
+];
+
 export default function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,53 +34,71 @@ export default function TripDetails() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
 
-  // Destination state
-  const [airportCode, setAirportCode] = useState("");
+  // Flexible destination state
+  const [destination, setDestination] = useState(initialDestination);
   const [addingDestination, setAddingDestination] = useState(false);
   const [removingDestination, setRemovingDestination] = useState(null);
   const [destinationError, setDestinationError] = useState("");
 
-  // Saved destinations state
-  const [savedDestinations, setSavedDestinations] = useState([]);
-  const [loadingSavedDestinations, setLoadingSavedDestinations] =
-    useState(true);
-  const [savedDestinationsError, setSavedDestinationsError] = useState("");
-  const [selectedSavedCode, setSelectedSavedCode] = useState("");
-
-  // Update trip details after editing
   const handleTripUpdated = updatedTrip => {
     setTrip(updatedTrip);
     setIsEditing(false);
   };
 
-  // Add destination manually
+  const handleDestinationChange = e => {
+    const { name, value } = e.target;
+
+    setDestination(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setDestinationError("");
+  };
+
+  // Add a flexible destination
   const handleAddDestination = async e => {
     e.preventDefault();
 
-    const code = airportCode.trim().toUpperCase();
+    if (addingDestination || removingDestination !== null) return;
 
-    if (!/^[A-Z0-9]{3}$/.test(code)) {
-      setDestinationError("Enter a valid three-character airport code.");
+    const name = destination.name.trim();
+
+    if (!name || name.length > 150) {
+      setDestinationError(
+        "Destination name must be between 1 and 150 characters.",
+      );
       return;
     }
 
-    if (addingDestination || removingDestination !== null) return;
+    const code = destination.airportCode.trim().toUpperCase();
+
+    if (code && !/^[A-Z0-9]{3}$/.test(code)) {
+      setDestinationError("Airport code must contain three characters.");
+      return;
+    }
 
     setAddingDestination(true);
     setDestinationError("");
 
     try {
-      const response = await api.post(`/api/trips/${id}/destinations`, {
+      const response = await api.post(`/api/trips/${id}/stops`, {
+        ...destination,
+        name,
+        city: destination.city.trim(),
+        state: destination.state.trim(),
+        country: destination.country.trim(),
         airportCode: code,
       });
 
       setTrip(response.data.trip);
-      setAirportCode("");
+      setDestination({ ...initialDestination });
     } catch (error) {
       console.error("Unable to add destination:", error);
 
       setDestinationError(
         error.response?.data?.message ||
+          error.response?.data?.error ||
           "Unable to add destination. Please try again.",
       );
     } finally {
@@ -71,8 +106,32 @@ export default function TripDetails() {
     }
   };
 
-  // Remove destination from trip
-  const handleRemoveDestination = async code => {
+  // Remove a flexible destination
+  const handleRemoveStop = async stopId => {
+    if (removingDestination !== null || addingDestination) return;
+
+    setRemovingDestination(stopId);
+    setDestinationError("");
+
+    try {
+      const response = await api.delete(`/api/trips/${id}/stops/${stopId}`);
+
+      setTrip(response.data.trip);
+    } catch (error) {
+      console.error("Unable to remove destination:", error);
+
+      setDestinationError(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Unable to remove destination.",
+      );
+    } finally {
+      setRemovingDestination(null);
+    }
+  };
+
+  // Remove a legacy airport-code destination
+  const handleRemoveLegacyDestination = async code => {
     if (removingDestination !== null || addingDestination) return;
 
     setRemovingDestination(code);
@@ -85,49 +144,19 @@ export default function TripDetails() {
 
       setTrip(response.data.trip);
     } catch (error) {
-      console.error("Unable to remove destination:", error);
+      console.error("Unable to remove airport:", error);
 
       setDestinationError(
         error.response?.data?.message ||
-          "Unable to remove destination. Please try again.",
+          error.response?.data?.error ||
+          "Unable to remove airport.",
       );
     } finally {
       setRemovingDestination(null);
     }
   };
 
-  const handleAddSavedDestination = async () => {
-    if (
-      !selectedSavedCode ||
-      addingDestination ||
-      removingDestination !== null
-    ) {
-      return;
-    }
-
-    setAddingDestination(true);
-    setDestinationError("");
-
-    try {
-      const response = await api.post(`/api/trips/${id}/destinations`, {
-        airportCode: selectedSavedCode,
-      });
-
-      setTrip(response.data.trip);
-      setSelectedSavedCode("");
-    } catch (error) {
-      console.error("Unable to add saved destination:", error);
-
-      setDestinationError(
-        error.response?.data?.message ||
-          "Unable to add saved destination. Please try again.",
-      );
-    } finally {
-      setAddingDestination(false);
-    }
-  };
-
-  // Delete trip from MongoDB
+  // Delete trip
   const handleDeleteTrip = async () => {
     if (deleting) return;
 
@@ -151,41 +180,6 @@ export default function TripDetails() {
     }
   };
 
-  // Fetch saved destinations
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchSavedDestinations = async () => {
-      setLoadingSavedDestinations(true);
-      setSavedDestinationsError("");
-
-      try {
-        const response = await api.get("/api/favorites/destinations", {
-          signal: controller.signal,
-        });
-
-        setSavedDestinations(response.data.savedDestinations || []);
-
-        // Temporary log for testing
-        console.log("Saved destinations:", response.data.savedDestinations);
-      } catch (error) {
-        if (controller.signal.aborted) return;
-
-        console.error("Unable to fetch saved destinations:", error);
-
-        setSavedDestinationsError("Unable to load your saved destinations.");
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoadingSavedDestinations(false);
-        }
-      }
-    };
-
-    fetchSavedDestinations();
-
-    return () => controller.abort();
-  }, []);
-
   // Fetch trip details
   useEffect(() => {
     const controller = new AbortController();
@@ -208,7 +202,7 @@ export default function TripDetails() {
         setError(
           error.response?.data?.message ||
             error.response?.data?.error ||
-            "Unable to load this trip. It may not exist or may no longer be available.",
+            "Unable to load this trip.",
         );
       } finally {
         if (!controller.signal.aborted) {
@@ -246,10 +240,12 @@ export default function TripDetails() {
 
   if (!trip) return null;
 
-  // Saved airports that are not already part of this trip
-  const availableSavedDestinations = savedDestinations.filter(
-    code => !trip.destinations?.includes(code),
-  );
+  const tripStops = trip.tripStops || [];
+  const legacyDestinations = trip.destinations || [];
+
+  const destinationCount = tripStops.length + legacyDestinations.length;
+
+  const isDestinationBusy = addingDestination || removingDestination !== null;
 
   return (
     <main className="container py-4">
@@ -258,7 +254,7 @@ export default function TripDetails() {
       </Link>
 
       <section className="border rounded-3 p-4">
-        {/* Trip heading and action buttons */}
+        {/* Trip heading and actions */}
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
           <h1 className="fw-bold mb-0">{trip.name}</h1>
 
@@ -272,7 +268,6 @@ export default function TripDetails() {
                 setDeleteError("");
               }}
               disabled={deleting}
-              aria-expanded={isEditing}
             >
               {isEditing ? "Cancel Edit" : "Edit Trip"}
             </button>
@@ -286,7 +281,6 @@ export default function TripDetails() {
                 setDeleteError("");
               }}
               disabled={deleting || showDeleteConfirm}
-              aria-expanded={showDeleteConfirm}
             >
               Delete Trip
             </button>
@@ -334,7 +328,7 @@ export default function TripDetails() {
           </div>
         )}
 
-        {/* Edit trip form */}
+        {/* Edit trip */}
         {isEditing && (
           <div className="border rounded-3 p-3 mb-4">
             <h2 className="h5 mb-3">Edit Trip</h2>
@@ -345,8 +339,6 @@ export default function TripDetails() {
 
         {/* Trip information */}
         <div className="mt-3">
-          <p className="text-muted">Destination: {trip.destinationCode}</p>
-
           {trip.startDate && (
             <p>
               <strong>Start:</strong> {trip.startDate.slice(0, 10)}
@@ -367,92 +359,142 @@ export default function TripDetails() {
           )}
         </div>
 
-        {/* Destinations associated with this trip */}
+        {/* Trip destinations */}
         <section className="border-top mt-4 pt-4">
           <div className="d-flex justify-content-between align-items-center gap-2 mb-3">
             <h2 className="h5 mb-0">Trip Destinations</h2>
 
-            <span className="badge text-bg-secondary">
-              {trip.destinations?.length || 0}
-            </span>
+            <span className="badge text-bg-secondary">{destinationCount}</span>
           </div>
 
-          {/* Select from saved destinations */}
-          <div className="mb-4">
-            <label htmlFor="saved-destination" className="form-label">
-              Choose from Saved Destinations
-            </label>
+          {/* Unified destination form */}
+          <form
+            onSubmit={handleAddDestination}
+            className="border rounded-3 p-3 mb-4"
+          >
+            <h3 className="h6 mb-3">Add Destination</h3>
 
-            {loadingSavedDestinations ? (
-              <p className="text-muted small">Loading saved destinations...</p>
-            ) : savedDestinationsError ? (
-              <p className="text-danger small" role="alert">
-                {savedDestinationsError}
-              </p>
-            ) : availableSavedDestinations.length === 0 ? (
-              <p className="text-muted small">
-                No saved destinations available to add.
-              </p>
-            ) : (
-              <div className="d-flex flex-column flex-sm-row gap-2">
+            <div className="row g-3">
+              <div className="col-12 col-md-8">
+                <label htmlFor="destination-name" className="form-label">
+                  Destination Name
+                </label>
+
+                <input
+                  id="destination-name"
+                  name="name"
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Phoenix or Grand Canyon"
+                  value={destination.name}
+                  onChange={handleDestinationChange}
+                  maxLength={150}
+                  required
+                  disabled={isDestinationBusy}
+                />
+              </div>
+
+              <div className="col-12 col-md-4">
+                <label htmlFor="destination-type" className="form-label">
+                  Destination Type
+                </label>
+
                 <select
-                  id="saved-destination"
+                  id="destination-type"
+                  name="type"
                   className="form-select"
-                  value={selectedSavedCode}
-                  onChange={e => setSelectedSavedCode(e.target.value)}
-                  disabled={addingDestination || removingDestination !== null}
+                  value={destination.type}
+                  onChange={handleDestinationChange}
+                  disabled={isDestinationBusy}
                 >
-                  <option value="">Select a saved destination</option>
-
-                  {availableSavedDestinations.map(code => (
-                    <option key={code} value={code}>
-                      {code}
+                  {destinationTypes.map(type => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
                     </option>
                   ))}
                 </select>
-
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleAddSavedDestination}
-                  disabled={
-                    !selectedSavedCode ||
-                    addingDestination ||
-                    removingDestination !== null
-                  }
-                >
-                  {addingDestination ? "Adding..." : "Add to Trip"}
-                </button>
               </div>
-            )}
-          </div>
 
-          {/* Add destination manually */}
-          <form onSubmit={handleAddDestination} className="mb-4">
-            <label htmlFor="trip-airport-code" className="form-label">
-              Add an airport to this trip
-            </label>
+              <div className="col-12 col-md-4">
+                <label htmlFor="destination-city" className="form-label">
+                  City (Optional)
+                </label>
 
-            <div className="d-flex flex-column flex-sm-row gap-2">
-              <input
-                id="trip-airport-code"
-                type="text"
-                className="form-control"
-                placeholder="Enter airport code (e.g. SFO)"
-                value={airportCode}
-                onChange={e => {
-                  setAirportCode(e.target.value.toUpperCase());
-                  setDestinationError("");
-                }}
-                maxLength={3}
-                autoComplete="off"
-                required
-              />
+                <input
+                  id="destination-city"
+                  name="city"
+                  type="text"
+                  className="form-control"
+                  value={destination.city}
+                  onChange={handleDestinationChange}
+                  maxLength={150}
+                  disabled={isDestinationBusy}
+                />
+              </div>
 
+              <div className="col-12 col-md-4">
+                <label htmlFor="destination-state" className="form-label">
+                  State / Region (Optional)
+                </label>
+
+                <input
+                  id="destination-state"
+                  name="state"
+                  type="text"
+                  className="form-control"
+                  value={destination.state}
+                  onChange={handleDestinationChange}
+                  maxLength={150}
+                  disabled={isDestinationBusy}
+                />
+              </div>
+
+              <div className="col-12 col-md-4">
+                <label htmlFor="destination-country" className="form-label">
+                  Country (Optional)
+                </label>
+
+                <input
+                  id="destination-country"
+                  name="country"
+                  type="text"
+                  className="form-control"
+                  value={destination.country}
+                  onChange={handleDestinationChange}
+                  maxLength={150}
+                  disabled={isDestinationBusy}
+                />
+              </div>
+
+              {destination.type === "airport" && (
+                <div className="col-12 col-md-4">
+                  <label
+                    htmlFor="destination-airport-code"
+                    className="form-label"
+                  >
+                    Airport Code (Optional)
+                  </label>
+
+                  <input
+                    id="destination-airport-code"
+                    name="airportCode"
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. PHX"
+                    value={destination.airportCode}
+                    onChange={handleDestinationChange}
+                    maxLength={3}
+                    disabled={isDestinationBusy}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="mt-3">
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={addingDestination || removingDestination !== null}
+                disabled={isDestinationBusy}
               >
                 {addingDestination ? "Adding..." : "Add Destination"}
               </button>
@@ -461,33 +503,81 @@ export default function TripDetails() {
 
           {/* Destination errors */}
           {destinationError && (
-            <p className="text-danger small mb-3" role="alert">
+            <p className="text-danger small" role="alert">
               {destinationError}
             </p>
           )}
 
-          {/* Display trip destinations */}
-          {!trip.destinations?.length ? (
-            <p className="text-muted mb-0">
-              No additional destinations added to this trip yet.
+          {/* Display flexible and legacy destinations */}
+          {destinationCount === 0 ? (
+            <p className="text-muted">
+              No destinations added to this trip yet.
             </p>
           ) : (
             <ul className="list-group">
-              {trip.destinations.map(code => (
+              {tripStops.map(stop => (
                 <li
-                  key={code}
-                  className="list-group-item d-flex justify-content-between align-items-center gap-3"
+                  key={stop._id}
+                  className="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"
                 >
-                  <div className="d-flex align-items-center gap-2">
-                    <span aria-hidden="true">📍</span>
-                    <span>{code}</span>
+                  <div>
+                    <div className="fw-semibold">📍 {stop.name}</div>
+
+                    <div className="text-muted small">
+                      {destinationTypes.find(type => type.value === stop.type)
+                        ?.label || stop.type}
+
+                      {[stop.city, stop.state, stop.country].filter(Boolean)
+                        .length > 0 && (
+                        <span>
+                          {" · "}
+                          {[stop.city, stop.state, stop.country]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </span>
+                      )}
+
+                      {stop.airportCode && (
+                        <span>
+                          {" · "}
+                          {stop.airportCode}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <button
                     type="button"
                     className="btn btn-outline-danger btn-sm"
-                    onClick={() => handleRemoveDestination(code)}
-                    disabled={removingDestination !== null || addingDestination}
+                    onClick={() => handleRemoveStop(stop._id)}
+                    disabled={isDestinationBusy}
+                    aria-label={`Remove ${stop.name} from trip`}
+                  >
+                    {removingDestination === stop._id
+                      ? "Removing..."
+                      : "Remove"}
+                  </button>
+                </li>
+              ))}
+
+              {legacyDestinations.map(code => (
+                <li
+                  key={`legacy-${code}`}
+                  className="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"
+                >
+                  <div>
+                    <div className="fw-semibold">📍 {code}</div>
+
+                    <div className="text-muted small">
+                      Airport · Previously saved destination
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => handleRemoveLegacyDestination(code)}
+                    disabled={isDestinationBusy}
                     aria-label={`Remove ${code} from trip`}
                   >
                     {removingDestination === code ? "Removing..." : "Remove"}

@@ -140,22 +140,23 @@ const Featured = ({ airlines = [], slug }) => {
   console.log("Is saved:", isSaved);
 
   return (
-    <article className="p-3 my-3" style={{ minHeight: "100vh" }}>
+    <article className="p-3 my-3">
       <div className="mb-3 p-3 shadow-sm rounded-3">
         {/* Airline logo and Save button */}
+        <Link className="btn btn-outline-primary btn-sm mb-3" to="/">
+          Back
+        </Link>
         <div className="d-flex justify-content-between align-items-center gap-3">
-          <Link to="/">
-            <img
-              src={`/${airline.logo}.png`}
-              alt={airline.name}
-              style={{
-                width: "100%",
-                maxWidth: "150px",
-                height: "auto",
-                objectFit: "contain",
-              }}
-            />
-          </Link>
+          <img
+            src={`/${airline.logo}.png`}
+            alt={airline.name}
+            style={{
+              width: "100%",
+              maxWidth: "150px",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
 
           <button
             type="button"

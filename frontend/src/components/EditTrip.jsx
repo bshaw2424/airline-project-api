@@ -4,7 +4,6 @@ import api from "../api/axios";
 export default function EditTrip({ trip, onTripUpdated }) {
   const [formData, setFormData] = useState({
     name: trip.name || "",
-    destinationCode: trip.destinationCode || "",
     startDate: trip.startDate?.slice(0, 10) || "",
     endDate: trip.endDate?.slice(0, 10) || "",
     notes: trip.notes || "",
@@ -20,28 +19,49 @@ export default function EditTrip({ trip, onTripUpdated }) {
       ...prev,
       [name]: value,
     }));
+
+    if (error) setError("");
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (saving) return;
+
+    const name = formData.name.trim();
+
+    if (!name) {
+      setError("Please enter a trip name.");
+      return;
+    }
+
+    if (
+      formData.startDate &&
+      formData.endDate &&
+      formData.endDate < formData.startDate
+    ) {
+      setError("End date cannot be before start date.");
+      return;
+    }
 
     setSaving(true);
     setError("");
 
     try {
       const response = await api.put(`/api/trips/${trip._id}`, {
-        ...formData,
-        destinationCode: formData.destinationCode.trim().toUpperCase(),
+        name,
         startDate: formData.startDate || null,
         endDate: formData.endDate || null,
+        notes: formData.notes.trim(),
       });
 
-      onTripUpdated(response.data.trip);
+      onTripUpdated?.(response.data.trip);
     } catch (error) {
       console.error("Unable to update trip:", error);
 
       setError(
-        error.response?.data?.error ||
+        error.response?.data?.message ||
+          error.response?.data?.error ||
           "Unable to update your trip. Please try again.",
       );
     } finally {
@@ -64,22 +84,7 @@ export default function EditTrip({ trip, onTripUpdated }) {
           onChange={handleChange}
           maxLength={100}
           required
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="editDestinationCode" className="form-label">
-          Destination Airport Code *
-        </label>
-        <input
-          type="text"
-          id="editDestinationCode"
-          name="destinationCode"
-          className="form-control"
-          value={formData.destinationCode}
-          onChange={handleChange}
-          maxLength={3}
-          required
+          disabled={saving}
         />
       </div>
 
@@ -95,6 +100,7 @@ export default function EditTrip({ trip, onTripUpdated }) {
             className="form-control"
             value={formData.startDate}
             onChange={handleChange}
+            disabled={saving}
           />
         </div>
 
@@ -110,6 +116,7 @@ export default function EditTrip({ trip, onTripUpdated }) {
             min={formData.startDate || undefined}
             value={formData.endDate}
             onChange={handleChange}
+            disabled={saving}
           />
         </div>
       </div>
@@ -126,6 +133,7 @@ export default function EditTrip({ trip, onTripUpdated }) {
           maxLength={1000}
           value={formData.notes}
           onChange={handleChange}
+          disabled={saving}
         />
       </div>
 
@@ -136,7 +144,7 @@ export default function EditTrip({ trip, onTripUpdated }) {
       )}
 
       <button type="submit" className="btn btn-primary" disabled={saving}>
-        {saving ? "Saving..." : "Save Changes"}
+        {saving ? "Saving Changes..." : "Save Changes"}
       </button>
     </form>
   );
