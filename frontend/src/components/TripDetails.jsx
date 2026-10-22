@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import EditTrip from "./EditTrip";
+import DestinationSearch from "./DestinationSearch";
 
 const initialDestination = {
   name: "",
@@ -52,6 +53,20 @@ export default function TripDetails() {
       ...prev,
       [name]: value,
     }));
+
+    setDestinationError("");
+  };
+
+  // Populate the form when an airport is selected from search
+  const handleSelectAirport = selectedAirport => {
+    setDestination({
+      name: selectedAirport.airport_name || selectedAirport.name || "",
+      type: "airport",
+      city: selectedAirport.city || "",
+      state: selectedAirport.state || "",
+      country: "",
+      airportCode: selectedAirport.airport_code || "",
+    });
 
     setDestinationError("");
   };
@@ -365,6 +380,15 @@ export default function TripDetails() {
             <h2 className="h5 mb-0">Trip Destinations</h2>
 
             <span className="badge text-bg-secondary">{destinationCount}</span>
+          </div>
+
+          {/* Search existing airports */}
+          <div className="mb-4">
+            <DestinationSearch
+              mode="trip"
+              onSelect={handleSelectAirport}
+              disabled={isDestinationBusy}
+            />
           </div>
 
           {/* Unified destination form */}
